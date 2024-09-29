@@ -48,3 +48,8 @@ Change log
 09 Receive server-side notifications via web sockets
 
 - Writing web socket client apps, https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
+
+10 Authentication - protected routes & auth context
+
+- High order components, https://reactjs.org/docs/higher-order-components.html
+- Protected routes, https://ui.dev/react-router-v4-protected-routes-authentication/
