@@ -53,3 +53,7 @@ Change log
 
 - High order components, https://reactjs.org/docs/higher-order-components.html
 - Protected routes, https://ui.dev/react-router-v4-protected-routes-authentication/
+
+11 Authentication - REST service & jwt
+
+- JSON Web Tokens, https://jwt.io/

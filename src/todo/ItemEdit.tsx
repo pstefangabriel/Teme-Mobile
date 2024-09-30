@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   IonButton,
   IonButtons,
@@ -28,16 +28,16 @@ const ItemEdit: React.FC<ItemEditProps> = ({ history, match }) => {
   useEffect(() => {
     log('useEffect');
     const routeId = match.params.id || '';
-    const item = items?.find(it => it.id === routeId);
+    const item = items?.find(it => it._id === routeId);
     setItem(item);
     if (item) {
       setText(item.text);
     }
   }, [match.params.id, items]);
-  const handleSave = useCallback(() => {
+  const handleSave = () => {
     const editedItem = item ? { ...item, text } : { text };
     saveItem && saveItem(editedItem).then(() => history.goBack());
-  }, [item, saveItem, text, history]);
+  };
   log('render');
   return (
     <IonPage>
