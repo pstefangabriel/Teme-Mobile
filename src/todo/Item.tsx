@@ -6,10 +6,15 @@ interface ItemPropsExt extends ItemProps {
   onEdit: (_id?: string) => void;
 }
 
-const Item: React.FC<ItemPropsExt> = ({ _id, text, onEdit }) => {
+const Item: React.FC<ItemPropsExt> = ({ _id, text, date, close, onEdit }) => {
+  const dateText = date ? new Date(date).toLocaleString() : '';
   return (
     <IonItem onClick={() => onEdit(_id)}>
-      <IonLabel>{text}</IonLabel>
+      <IonLabel>
+        <h2>{text}</h2>
+        <p>{dateText}</p>
+        <p>Close: {close ? 'Yes' : 'No'}</p>
+      </IonLabel>
     </IonItem>
   );
 };

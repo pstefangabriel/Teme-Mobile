@@ -91,6 +91,8 @@ export const ItemProvider: React.FC<ItemProviderProps> = ({ children }) => {
     }
     return () => {
       canceled = true;
+      // Ensure we don't leave the loader spinning if this effect cleans up while a fetch is in flight
+      dispatch({ type: FETCH_ITEMS_FAILED, payload: { error: null } });
     }
 
     async function fetchItems() {
@@ -104,7 +106,9 @@ export const ItemProvider: React.FC<ItemProviderProps> = ({ children }) => {
         }
       } catch (error) {
         log('fetchItems failed', error);
-        dispatch({ type: FETCH_ITEMS_FAILED, payload: { error } });
+        if (!canceled) {
+          dispatch({ type: FETCH_ITEMS_FAILED, payload: { error } });
+        }
       }
     }
   }

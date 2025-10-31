@@ -6,12 +6,14 @@ import { login as loginApi } from './authApi';
 const log = getLogger('AuthProvider');
 
 type LoginFn = (username?: string, password?: string) => void;
+type LogoutFn = () => void;
 
 export interface AuthState {
   authenticationError: Error | null;
   isAuthenticated: boolean;
   isAuthenticating: boolean;
   login?: LoginFn;
+  logout?: LogoutFn;
   pendingAuthentication?: boolean;
   username?: string;
   password?: string;
@@ -26,6 +28,8 @@ const initialState: AuthState = {
   token: '',
 };
 
+const TOKEN_KEY = 'authToken';
+
 export const AuthContext = React.createContext<AuthState>(initialState);
 
 interface AuthProviderProps {
@@ -36,8 +40,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, setState] = useState<AuthState>(initialState);
   const { isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, token } = state;
   const login = useCallback<LoginFn>(loginCallback, []);
+  const logout = useCallback<LogoutFn>(logoutCallback, []);
   useEffect(authenticationEffect, [pendingAuthentication]);
-  const value = { isAuthenticated, login, isAuthenticating, authenticationError, token };
+  useEffect(hydrateEffect, []);
+  const value = { isAuthenticated, login, logout, isAuthenticating, authenticationError, token };
   log('render');
   return (
     <AuthContext.Provider value={value}>
@@ -53,6 +59,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       username,
       password
     });
+  }
+
+  function logoutCallback(): void {
+    log('logout');
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+    } catch (e) {
+      log('logout localStorage remove failed', e);
+    }
+    setState({
+      ...initialState
+    });
+  }
+
+  function hydrateEffect() {
+    log('hydrateEffect');
+    try {
+      const storedToken = localStorage.getItem(TOKEN_KEY) || '';
+      if (storedToken) {
+        log('token found in storage');
+        setState({
+          ...state,
+          token: storedToken,
+          isAuthenticated: true,
+        });
+      }
+    } catch (e) {
+      log('hydrateEffect failed', e);
+    }
   }
 
   function authenticationEffect() {
@@ -79,6 +114,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           return;
         }
         log('authenticate succeeded');
+        try {
+          localStorage.setItem(TOKEN_KEY, token);
+        } catch (e) {
+          log('localStorage set failed', e);
+        }
         setState({
           ...state,
           token,

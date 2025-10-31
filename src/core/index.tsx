@@ -1,9 +1,9 @@
 export const baseUrl = 'localhost:3000';
 
-export const getLogger: (tag: string) => (...args: any) => void =
-  tag => (...args) => console.log(tag, ...args);
+export { getLogger } from './logger';
 
-const log = getLogger('api');
+import { getLogger as _getLogger } from './logger';
+const log = _getLogger('api');
 
 export interface ResponseProps<T> {
   data: T;
@@ -34,3 +34,6 @@ export const authConfig = (token?: string) => ({
     Authorization: `Bearer ${token}`,
   }
 });
+
+// Re-export hooks/utilities to keep a single import surface
+export * from './useNetwork';
