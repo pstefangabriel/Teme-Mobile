@@ -67,7 +67,7 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
   }, [items, searchText, closeFilter]);
 
   // Infinite scroll state: how many items are currently visible
-  const pageSize = 4; // show 4 items initially, then load more on scroll
+  const pageSize = 4;
   const [visibleCount, setVisibleCount] = useState(pageSize);
 
   // Reset visible count when the filter or search changes to ensure UX stays consistent
@@ -154,7 +154,6 @@ const ItemList: React.FC<RouteComponentProps> = ({ history }) => {
           </IonFabButton>
         </IonFab>
 
-        {/* Place infinite scroll as the last child of IonContent for reliability */}
         <IonInfiniteScroll onIonInfinite={loadMore} threshold="100px" disabled={infiniteDisabled}>
           <IonInfiniteScrollContent loadingSpinner="bubbles" loadingText="Loading more items..." />
         </IonInfiniteScroll>
