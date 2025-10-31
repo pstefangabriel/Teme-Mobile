@@ -34,11 +34,11 @@ export const getItems: () => Promise<ItemProps[]> = () => {
   return withLogs(axios.get(itemUrl, config), 'getItems');
 }
 
-export const createItem: (item: ItemProps) => Promise<ItemProps[]> = item => {
+export const createItem: (item: ItemProps) => Promise<ItemProps> = item => {
   return withLogs(axios.post(itemUrl, item, config), 'createItem');
 }
 
-export const updateItem: (item: ItemProps) => Promise<ItemProps[]> = item => {
+export const updateItem: (item: ItemProps) => Promise<ItemProps> = item => {
   return withLogs(axios.put(`${itemUrl}/${item.id}`, item, config), 'updateItem');
 }
 
